@@ -24,7 +24,7 @@ function createRandomUser() {
   return {         
       "id": faker.string.uuid(),
       "from": faker.internet.email(),
-      "subject": `Hello from Anya + ${faker.internet.username()}`,
+      "subject": `Hello from + ${faker.internet.username()}`,
       "body": "Long message body here" ,
       "received": faker.date.past().getTime()
   }      
