@@ -7,11 +7,16 @@ import { faker } from '@faker-js/faker';
 const app = express();
 const port = process.env.PORT || 7071;  
 
-app.use(cors({
-  origin: '*',
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type']
-}));
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Requested-With');  
+  
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204);
+  }
+  next();
+});
 
 app.use(bodyParser.json());
 
@@ -24,7 +29,6 @@ function createRandomUser() {
       "received": faker.date.past().getTime()
   }      
 }
-
 
 
 app.get('/messages/unread', (req, res) => {
@@ -58,6 +62,11 @@ app.get('/messages/unread', (req, res) => {
     return res.status(409).json(result);
   }
 });
+
+app.listen(port, '0.0.0.0', () => {
+  console.log(`✅ Server is running on port ${port}`);  
+  console.log(`📋 Test: http://localhost:${port}//messages/unread`);
+})
 
 
 
